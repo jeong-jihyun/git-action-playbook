@@ -19,16 +19,11 @@
 10. [위험한 명령 (조심!)](#10-위험한-명령-조심)
 11. [실전 시나리오 따라하기](#11-실전-시나리오-따라하기)
 12. [마지막 3가지 원칙](#12-마지막-3가지-원칙)
+13. [부록: 명령어 한눈에 보기](#부록-명령어-한눈에-보기)
 
 ---
 
-
-
-
-
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 1. 먼저 알아둘 단어 5개
 
@@ -42,17 +37,17 @@
 
 > 💡 **충돌은 에러가 아닙니다.** "내가 판단하기 어려우니 사람이 골라줘"라는 **정상적인 신호**입니다.
 
+<br>
+
+### Git의 3칸 구조 (이것만 알면 명령어가 보입니다)
+
+![Git의 3칸 구조](images/three-areas.svg)
+
+대부분의 명령은 "이 칸에서 저 칸으로 옮기거나, 되돌리는 것"입니다.
+
 ---
 
-
-
-
-
-
-
-
-
-## 2. 상황별 바로 찾기 (메인 치트시트)
+<br/><br/><br/><br/><br/><br/><br/><br/>## 2. 상황별 바로 찾기 (메인 치트시트)
 
 **지금 내 상황을 왼쪽에서 찾고, 오른쪽 명령을 그대로 입력하세요.**
 
@@ -80,13 +75,7 @@
 
 ---
 
-
-
-
-
-
-
-## 3. 브랜치 (작업 공간 나누기)
+<br/><br/><br/><br/><br/><br/><br/><br/>## 3. 브랜치 (작업 공간 나누기)
 
 ### 자주 쓰는 명령
 
@@ -103,10 +92,7 @@
 | GitHub의 브랜치 지우기 | `git push origin --delete feature/login` | |
 | 사라진 원격 브랜치 정리 | `git fetch --prune` | 목록만 깔끔하게 |
 
-
-
-
-
+<br>
 
 ### 브랜치 이름에 `/` (슬래시) 쓰는 이유
 
@@ -126,11 +112,82 @@
 
 ---
 
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 4. 병합 (작업 합치기)
+
+### 4-1. 브랜치 머지하는 법
+
+> **`git merge A`는 "A를 지금 내가 있는 브랜치로 가져온다"는 뜻입니다.**
+> 그래서 **받는 쪽 브랜치로 먼저 이동**한 다음 merge 해야 합니다.
+> (feature를 main에 합치고 싶다 → `main`으로 이동 → `main`에서 `merge feature`)
+
+![merge 그림 설명](images/merge.svg)
+
+**기본 순서 (feature → main)**
+
+```bash
+git status                          # 1. 커밋 안 한 변경이 없는지 확인
+git switch main                     # 2. 받는 쪽(main)으로 이동
+git pull                            # 3. main을 최신으로 맞추기
+git merge --no-ff feature/login     # 4. feature를 main에 합치기
+git push                            # 5. 합친 결과 올리기
+git branch -d feature/login                  # 6. 다 쓴 브랜치 삭제 (내 컴퓨터)
+git push origin --delete feature/login       #    (GitHub)
+```
+
+| 단계 | 이유 |
+|---|---|
+| 1. `status` | 커밋 안 한 변경이 있으면 합치기가 꼬일 수 있음 |
+| 2. `switch main` | merge는 "내가 있는 곳"으로 합쳐지기 때문 |
+| 3. `pull` | 오래된 main에 합치면 나중에 push가 거부됨 |
+| 4. `merge --no-ff` | "여기서 합쳤다"는 기록을 남김 |
+| 6. `branch -d` | 병합된 브랜치만 안전하게 지워짐 |
+
+**반대 방향 (main → feature): 내 브랜치를 최신으로 맞출 때**
+
+```bash
+git switch feature/login
+git merge main                      # main의 새 내용을 내 브랜치로 가져오기
+```
+
+충돌은 보통 여기서 먼저 처리합니다. 그러면 main에 합칠 때 충돌 없이 깔끔하게 끝납니다.
+
+**합친 결과 모양**
+
+```
+① 갈라졌던 경우: 합친 커밋(M)이 생김      ② main이 그대로인 경우 (fast-forward)
+main:     A ── B ────── M                  main:     A ── B ── C ── D
+                \      /                   (--no-ff 를 붙이면 이 경우에도 합친 커밋을 만듦)
+feature:         C ── D
+```
+
+**충돌이 나면** → 5장 참고. 판단이 안 서면 `git merge --abort` 로 합치기 시작 전으로 돌아갑니다.
+
+**자주 하는 실수**
+
+| 실수 | 증상 | 해결 |
+|---|---|---|
+| 방향을 반대로 함 | 의도와 다른 브랜치가 바뀜 | push 전: `git reset --hard HEAD~1` / push 후: `git revert -m 1 머지커밋ID` |
+| 커밋 안 하고 merge | "Your local changes would be overwritten" | 먼저 커밋하거나 `git stash` |
+| main을 안 받고 merge | push 때 rejected | `git pull --rebase` 후 다시 `git push` |
+| merge 후 `branch -d` 실패 | "not fully merged" | 합쳐지지 않은 커밋이 있다는 뜻. 확인 후 결정 |
+
+**실무에서는 PR(Pull Request)로 합칩니다**
+
+```bash
+git push -u origin feature/login    # 1. 브랜치 올리기
+# 2. GitHub에서 Pull Request 생성 → 리뷰 → "Merge" 버튼 클릭
+git switch main
+git pull                            # 3. 합쳐진 결과를 내 컴퓨터로 받기
+git branch -d feature/login         # 4. 정리
+```
+
+GitHub의 Merge 버튼은 서버에서 위의 `git merge` 와 같은 일을 해 줍니다.
+
+<br>
+
+### 4-2. 합치기 관련 명령 모음
 
 | 하고 싶은 것 | 명령어 | 설명 |
 |---|---|---|
@@ -142,11 +199,11 @@
 | 내 작업을 최신 코드 **위에 다시 얹기** | `git rebase origin/main` | 이력이 깔끔해짐 |
 | 최근 커밋 5개 정리(합치기/메시지 수정) | `git rebase -i HEAD~5` | |
 
-
-
-
+<br>
 
 ### merge vs rebase — 쉬운 비유
+
+![merge와 rebase 비교](images/merge-vs-rebase.svg)
 
 | | merge | rebase |
 |---|---|---|
@@ -160,11 +217,7 @@
 
 ---
 
-
-
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 5. 충돌 해결 (가장 중요)
 
@@ -177,11 +230,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 
 → **"login.ts 파일에서 두 사람이 같은 곳을 고쳐서, 내가 결정해줘야 한다"** 는 뜻입니다.
 
-
-
-
-
-
+<br>
 
 ### 5-2. 파일을 열면 이렇게 생겼습니다
 
@@ -209,14 +258,7 @@ function login(user) {
 }
 ```
 
-
-
-
-
-
-
-
-
+<br>
 
 ### 5-3. 해결 순서 (이 5단계만 기억하세요)
 
@@ -230,17 +272,7 @@ function login(user) {
 
 **그리고 꼭!** 테스트나 빌드를 돌려보세요. 표시만 지우고 코드가 깨지는 경우가 정말 많습니다.
 
-
-
-
-
-
-
-
-
-
-
-
+<br>
 
 ### 5-4. "내 걸로 할까, 상대 걸로 할까?" 빠른 선택
 
@@ -253,6 +285,8 @@ function login(user) {
 | 어떤 커밋 때문에 충돌했는지 보고 싶다 | `git log --merge -p 파일경로` |
 | 눈으로 비교하며 고치고 싶다 | `git mergetool` (VS Code 등) |
 
+<br>
+
 ### ⚠️ 꼭 알아야 할 함정: rebase 중에는 ours/theirs가 반대!
 
 | 작업 중인 것 | `--ours` 가 뜻하는 것 | `--theirs` 가 뜻하는 것 |
@@ -263,17 +297,7 @@ function login(user) {
 > "rebase 중에 내 코드가 사라졌다"는 사고의 90%가 이 표 때문입니다.
 > 헷갈리면 `git checkout --conflict=diff3 파일경로` 로 **원본까지 같이 표시**해서 보세요.
 
-
-
-
-
-
-
-
-
-
-
-
+<br>
 
 ### 5-5. 충돌 유형별 대처
 
@@ -286,17 +310,7 @@ function login(user) {
 | 이미지·엑셀 충돌 | 글자로 비교 불가 | 한쪽 선택만 가능 (`--ours`/`--theirs`) |
 | `package-lock.json` 충돌 | 자동 생성 파일 | **손으로 고치지 말고** 한쪽 선택 → `npm install` 로 재생성 |
 
-
-
-
-
-
-
-
-
-
-
-
+<br>
 
 ### 5-6. 충돌 났을 때 "일단 취소" 하고 싶다면
 
@@ -312,17 +326,21 @@ function login(user) {
 
 ---
 
-
-
-
-
-
-
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 6. 되돌리기 (실수 복구)
+
+### 한눈에 보는 "되돌리기" 선택법
+
+```
+아직 커밋 안 함        → git restore
+커밋했지만 push 전     → git reset (또는 --amend)
+이미 push 함          → git revert
+합치다 꼬였다         → --abort
+다 꼬였다             → git reflog
+```
+
+<br>
 
 ### 6-1. "아직 push 안 했을 때" — 마음 편히 되돌리기
 
@@ -336,17 +354,11 @@ function login(user) {
 | 파일 하나만 수정 전으로 | `git restore 파일경로` |
 | `add` 한 것만 취소 (내용은 유지) | `git restore --staged 파일경로` |
 
-
-
-
-
-
-
-
-
-
+<br>
 
 ### 6-2. "이미 push 했을 때" — 기록을 지우지 말고 뒤집기
+
+![reset과 revert 비교](images/reset-vs-revert.svg)
 
 | 하고 싶은 것 | 명령어 | 이유 |
 |---|---|---|
@@ -357,13 +369,7 @@ function login(user) {
 > 💡 **규칙:** 아직 push 전 → `reset` / 이미 push 함 → `revert`
 > 이미 남들이 받아간 기록을 `reset` + 강제 push 로 지우면 팀 전체가 꼬입니다.
 
-
-
-
-
-
-
-
+<br>
 
 ### 6-3. 예전 파일 내용 꺼내기
 
@@ -375,17 +381,13 @@ function login(user) {
 
 ---
 
-
-
-
-
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 7. 잠깐 저장하기 (stash)
 
 **"작업 중인데 갑자기 다른 브랜치로 가야 할 때"** 쓰는 기능입니다. 커밋하지 않고 서랍에 잠깐 넣어두는 느낌.
+
+![stash 흐름](images/stash.svg)
 
 | 하고 싶은 것 | 명령어 |
 |---|---|
@@ -398,12 +400,6 @@ function login(user) {
 | 특정 것 꺼내기 | `git stash apply stash@{2}` |
 | 내용 미리 보기 | `git stash show -p stash@{0}` |
 | 치운 것 버리기 | `git stash drop stash@{0}` |
-
-
-
-
-
-
 
 **실무 패턴**
 
@@ -419,11 +415,7 @@ git stash pop        # 아까 작업 다시 꺼내기
 
 ---
 
-
-
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 8. 문제 생겼을 때 응급 처치
 
@@ -442,11 +434,7 @@ git stash pop        # 아까 작업 다시 꺼내기
 | 코드가 갑자기 안 돌아간다 | 충돌 해결 실수 | `git diff` 로 확인 → `git restore 파일` |
 | 엉뚱한 파일을 커밋했다 | `add` 실수 | `git reset HEAD~1` 후 다시 커밋 |
 
-
-
-
-
-
+<br>
 
 ### 🚑 최후의 수단: reflog (되돌리기 타임머신)
 
@@ -465,11 +453,7 @@ git reset --hard 8c1d4e2     # 그 상태로 되돌아가기
 
 ---
 
-
-
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 9. 원격 저장소 (GitHub 등)
 
@@ -493,11 +477,7 @@ git push
 
 ---
 
-
-
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 10. 위험한 명령 (조심!)
 
@@ -514,9 +494,7 @@ git push
 
 ---
 
-
-
-
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 11. 실전 시나리오 따라하기
 
@@ -533,6 +511,8 @@ git commit -m "feat: 로그인 페이지 추가"
 git push -u origin feature/login-page
 ```
 
+<br>
+
 ### 시나리오 B. 급한 오류 수정 (작업 중간에 끼어들기)
 
 ```bash
@@ -548,6 +528,8 @@ git switch feature/login-page
 git stash pop                          # 하던 일 다시 꺼내기
 ```
 
+<br>
+
 ### 시나리오 C. 충돌 해결 (merge)
 
 ```bash
@@ -561,6 +543,8 @@ git diff --check                        # 표시 남았는지 검사
 npm test                                # 테스트 (필수!)
 git commit                              # 마무리
 ```
+
+<br>
 
 ### 시나리오 D. 충돌 해결 (rebase)
 
@@ -578,6 +562,8 @@ git rebase --skip                       # 이 커밋 건너뛰기
 git rebase --abort                      # 아니면 전부 취소 (안전)
 ```
 
+<br>
+
 ### 시나리오 E. 잘못 올린 커밋 되돌리기
 
 ```bash
@@ -585,6 +571,8 @@ git log --oneline -5                    # 되돌릴 커밋ID 확인
 git revert 3f2a1b9                      # 취소 커밋 자동 생성
 git push                                # 기록이 남는 안전한 방법
 ```
+
+<br>
 
 ### 시나리오 F. push 전 커밋 3개를 하나로 합치기
 
@@ -596,6 +584,8 @@ git rebase -i HEAD~3
 git log --oneline -3                    # 확인
 ```
 
+<br>
+
 ### 시나리오 G. 다른 브랜치의 커밋 하나만 가져오기
 
 ```bash
@@ -604,6 +594,8 @@ git cherry-pick 8c1d4e2                 # 그 커밋만 내 브랜치에 복사
 ```
 
 ---
+
+<br/><br/><br/><br/><br/><br/><br/><br/>
 
 ## 12. 마지막 3가지 원칙
 
@@ -614,6 +606,8 @@ git cherry-pick 8c1d4e2                 # 그 커밋만 내 브랜치에 복사
 3. **막히면 `git reflog`** — 대부분의 실수는 여기서 복구됩니다.
 
 ---
+
+<br>
 
 ### 🧠 30초 요약
 
@@ -628,3 +622,46 @@ git cherry-pick 8c1d4e2                 # 그 커밋만 내 브랜치에 복사
 | ⑦ 문제 시 | `--abort` 또는 `git reflog` |
 
 > 충돌은 **"표시 3개 지우고 `git add`"** 만 기억하면 됩니다.
+
+---
+
+<br/><br/><br/><br/><br/><br/><br/><br/>
+
+## 부록: 명령어 한눈에 보기
+
+용도별로 묶은 요약표입니다. 자세한 설명은 각 장을 보세요.
+
+| 구분 | 명령어 | 하는 일 |
+|---|---|---|
+| **보기** (안전) | `git status` | 지금 뭐가 바뀌었는지 확인 |
+| | `git diff` | 바뀐 내용을 줄 단위로 확인 |
+| | `git log --oneline --graph -20` | 최근 커밋 20개를 한 줄씩 보기 |
+| | `git branch -vv` | 브랜치 목록과 원격과의 차이 |
+| | `git reflog` | 내가 한 모든 동작 기록 (복구용) |
+| **저장** | `git add -A` | 변경 전부를 커밋 대상으로 고르기 |
+| | `git commit -m "설명"` | 지금 상태를 저장 (세이브) |
+| | `git commit --amend` | 방금 커밋 수정 (push 전만) |
+| **브랜치** | `git switch -c 이름` | 새 브랜치 만들고 이동 |
+| | `git switch 이름` | 다른 브랜치로 이동 |
+| | `git branch -d 이름` | 다 쓴 브랜치 삭제 |
+| **합치기** (4장) | `git merge 브랜치` | 그 브랜치를 **지금 있는 곳**에 합침 |
+| | `git merge --no-ff 브랜치` | 합친 흔적을 남기며 합침 |
+| | `git merge --ff-only 브랜치` | 한 줄로 합쳐질 때만 합침 (안전) |
+| | `git cherry-pick 커밋ID` | 커밋 **하나만** 복사해 옴 |
+| | `git rebase origin/main` | 내 작업을 최신 코드 뒤에 다시 얹음 |
+| | `git rebase -i HEAD~3` | 최근 커밋 3개 합치기·정리 |
+| **충돌** (5장) | `git add 파일` | "이 파일 해결했다"고 표시 |
+| | `git diff --check` | `<<<<<<<` 표시가 남았는지 검사 |
+| | `git checkout --ours/--theirs 파일` | 한쪽 내용으로 통째로 선택 |
+| | `git merge --abort` / `git rebase --abort` | 전부 취소하고 시작 전으로 |
+| **되돌리기** (6장) | `git restore 파일` | 파일 하나를 수정 전으로 (커밋 전) |
+| | `git restore --staged 파일` | `add` 한 것만 취소 |
+| | `git reset --soft HEAD~1` | 커밋만 취소, 코드는 남김 (push 전) |
+| | `git reset --hard HEAD~1` | 커밋·코드 **전부 삭제** ⚠️ (push 전) |
+| | `git revert 커밋ID` | "취소하는 새 커밋" 추가 (**push 후**) |
+| **잠깐 치우기** (7장) | `git stash push -u -m "메모"` | 작업을 서랍에 넣기 (새 파일 포함) |
+| | `git stash pop` / `apply` / `drop` | 꺼내기(삭제) / 꺼내기(유지) / 버리기 |
+| **원격** (9장) | `git fetch origin` | 원격 최신 상태만 확인 |
+| | `git pull` / `git pull --rebase` | 받아서 합치기 / 받아서 위에 얹기 |
+| | `git push` / `git push -u origin 이름` | 올리기 / 처음 올리기 |
+| | `git push --force-with-lease` | 안전한 강제 덮어쓰기 |

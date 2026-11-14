@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <rect width="900" height="300" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <line x1="450" y1="20" x2="450" y2="280" stroke="#cbd5e1" stroke-dasharray="5 5"/>
+
+  <!-- merge -->
+  <text x="225" y="38" font-size="18" font-weight="700" text-anchor="middle" fill="#0f172a">merge (합치기)</text>
+  <g stroke="#475569" stroke-width="3" fill="none">
+    <line x1="50" y1="100" x2="330" y2="100"/>
+    <path d="M110 100 L150 160 L330 160"/>
+    <path d="M250 160 L330 100"/>
+  </g>
+  <g fill="#3b82f6"><circle cx="50" cy="100" r="14"/><circle cx="110" cy="100" r="14"/><circle cx="190" cy="100" r="14"/></g>
+  <g fill="#f59e0b"><circle cx="170" cy="160" r="14"/><circle cx="250" cy="160" r="14"/></g>
+  <circle cx="330" cy="100" r="16" fill="#22c55e"/>
+  <text x="225" y="215" font-size="14" text-anchor="middle" fill="#334155" font-weight="700">갈라졌다가 합쳐짐 (Y자)</text>
+  <text x="225" y="240" font-size="13" text-anchor="middle" fill="#475569">기록이 그대로 남아 안전</text>
+  <text x="225" y="262" font-size="13" text-anchor="middle" fill="#15803d" font-weight="700">공유 브랜치(main)에 합칠 때</text>
+
+  <!-- rebase -->
+  <text x="675" y="38" font-size="18" font-weight="700" text-anchor="middle" fill="#0f172a">rebase (다시 얹기)</text>
+  <g stroke="#475569" stroke-width="3" fill="none">
+    <line x1="500" y1="100" x2="840" y2="100"/>
+  </g>
+  <g fill="#3b82f6"><circle cx="500" cy="100" r="14"/><circle cx="560" cy="100" r="14"/><circle cx="640" cy="100" r="14"/></g>
+  <g fill="#f59e0b" stroke="#b45309" stroke-width="2" stroke-dasharray="4 3"><circle cx="720" cy="100" r="14"/><circle cx="790" cy="100" r="14"/></g>
+  <g font-size="12" font-weight="700" fill="#fff" text-anchor="middle"><text x="500" y="105">A</text><text x="560" y="105">B</text><text x="640" y="105">E</text></g>
+  <g font-size="12" font-weight="700" fill="#7c2d12" text-anchor="middle"><text x="720" y="105">C'</text><text x="790" y="105">D'</text></g>
+  <text x="755" y="140" font-size="12" text-anchor="middle" fill="#b45309">내 커밋이 최신 뒤로 옮겨짐</text>
+  <text x="675" y="215" font-size="14" text-anchor="middle" fill="#334155" font-weight="700">한 줄로 쭉 (─)</text>
+  <text x="675" y="240" font-size="13" text-anchor="middle" fill="#475569">이력이 깔끔하지만 커밋이 새로 만들어짐</text>
+  <text x="675" y="262" font-size="13" text-anchor="middle" fill="#b91c1c" font-weight="700">내 브랜치(push 전)를 최신으로 맞출 때만</text>
+</svg>

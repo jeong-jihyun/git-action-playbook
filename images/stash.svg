@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" width="900" height="250" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#475569"/></marker>
+  </defs>
+  <rect width="900" height="250" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="450" y="34" font-size="18" font-weight="700" text-anchor="middle" fill="#0f172a">stash: 하던 일을 서랍에 넣고 급한 일 하고 오기</text>
+
+  <g font-size="14" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="20" y="75" width="150" height="70" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="95" y="105">① 로그인 작업</text><text x="95" y="126" font-size="12" font-weight="400">커밋하긴 애매함</text>
+    <rect x="200" y="75" width="150" height="70" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="275" y="105">② 서랍에 넣기</text><text x="275" y="126" font-size="12" font-weight="400">stash push -u</text>
+    <rect x="380" y="75" width="150" height="70" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <text x="455" y="105">③ 급한 일 처리</text><text x="455" y="126" font-size="12" font-weight="400">main → hotfix → push</text>
+    <rect x="560" y="75" width="150" height="70" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <text x="635" y="105">④ 원래 브랜치로</text><text x="635" y="126" font-size="12" font-weight="400">switch feature/login</text>
+    <rect x="740" y="75" width="140" height="70" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="810" y="105">⑤ 꺼내기</text><text x="810" y="126" font-size="12" font-weight="400">stash pop</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" marker-end="url(#ah2)">
+    <line x1="172" y1="110" x2="196" y2="110"/>
+    <line x1="352" y1="110" x2="376" y2="110"/>
+    <line x1="532" y1="110" x2="556" y2="110"/>
+    <line x1="712" y1="110" x2="736" y2="110"/>
+  </g>
+  <g font-size="13" fill="#334155" text-anchor="middle">
+    <text x="450" y="188"><tspan font-weight="700">-u</tspan> : 새로 만든 파일도 같이 넣기 (빼먹기 쉬우니 습관처럼!)</text>
+    <text x="450" y="212"><tspan font-weight="700">pop</tspan> : 꺼내면서 서랍에서 삭제 / <tspan font-weight="700">apply</tspan> : 꺼내되 서랍에 남김</text>
+  </g>
+</svg>

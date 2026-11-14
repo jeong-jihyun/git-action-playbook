@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" width="900" height="220" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#475569"/></marker>
+  </defs>
+  <rect width="900" height="220" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <g font-size="17" font-weight="700" text-anchor="middle" fill="#0f172a">
+    <rect x="25" y="85" width="160" height="70" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+    <text x="105" y="127">작업 폴더</text>
+    <rect x="260" y="85" width="160" height="70" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <text x="340" y="127">스테이징</text>
+    <rect x="480" y="85" width="160" height="70" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <text x="560" y="127">내 저장소</text>
+    <rect x="715" y="85" width="160" height="70" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="795" y="127">GitHub</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" marker-end="url(#ah)">
+    <line x1="187" y1="120" x2="256" y2="120"/>
+    <line x1="422" y1="120" x2="476" y2="120"/>
+    <line x1="642" y1="120" x2="711" y2="120"/>
+  </g>
+  <g font-size="15" font-weight="700" text-anchor="middle" fill="#334155">
+    <text x="222" y="108">add</text>
+    <text x="449" y="108">commit</text>
+    <text x="677" y="108">push</text>
+  </g>
+  <g font-size="13" text-anchor="middle" fill="#475569">
+    <text x="105" y="180">파일을 고치는 곳</text>
+    <text x="340" y="180">커밋할 것 고르는 곳</text>
+    <text x="560" y="180">내 컴퓨터에 기록(세이브)</text>
+    <text x="795" y="180">원격에 업로드</text>
+  </g>
+  <text x="450" y="40" font-size="18" font-weight="700" text-anchor="middle" fill="#0f172a">Git의 3칸 구조</text>
+</svg>
